@@ -1,0 +1,65 @@
+# Curl #
+1. 抓取页面内容到一个文件中
+    - curl -o home.html  http://www.codesky.net
+2. 用-O（大写的），后面的url要具体到某个文件，不然抓不下来。我们还可以用正则来抓取东西
+    - curl -O http://www.codesky.net/wp-content/uploads/2010/09/compare_varnish.jpg
+    - curl -O http://www.codesky.net/wp-content/uploads/2010/[0-9][0-9]/aaaaa.jpg
+3. 用代理
+    - curl -x 24.10.28.84:32779 -o home.html http://www.codesky.net
+4. 抓取http头：
+    - curl --head(|-I) www.baidu.com
+# nc #
+1. 监听一个端口：nc -l 1234
+2. 连接监听端口：nc 192.168.56.101 1234
+3. 监听一个端口，并将结果保存到文件：nc -l 1234 > filename.out
+4. 将一个文件作为内容发送：nc 192.168.56.101 1234 < filename.in
+5. 获取一个web page: echo -ne "HEAD / HTTP/1.0\r\nHost: www.baidu.com\r\nConnection: close\r\n\r\n" | nc www.baidu.com 80
+6. 使用本地端口31337连接baidu.com:8080,并设置超时时间5s:  nc -p 31337 -w 5 baidu.com 8080
+7. 打开一个udp连接： nc -u baidu.com 80
+8. 使用10.1.2.3这个Ip连接远程服务器： nc -s 10.1.2.3 baidu.com 80
+9. http代理服务器10.2.3.4:8080连接：nc -x10.2.3.4:8080 -Xconnect baidu.com
+10. 扫描端口：nc -z host.example.com 20-30
+11. A机器压缩文件传到B机器:
+        A: tar cf - /redis_client | nc -l 1234
+        B: nc A_ip 1234 | tar xf -
+# lsof #
+1. 查看谁正在使用/bin/bash这个文件:   lsof /bin/bash
+2. 列出某个用户打开的文件：lsof -u maxingsong
+3. 列出某个程序打开的文件：lsof -c mysql
+4. 列出某个进程打开的文件：lsof -p 1[,2,3]
+5. 列出所有的网络连接： lsof -i
+6. 列出所有的tcp连接： lsof -i tcp
+7. 列出所有的udp连接： lsof -i udp
+8. 列出谁在使用某个特定的端口8087: lsof -i :8087
+9. 列出谁在使用tcp的某个特定的端口8087: lsof -i tcp:8087
+10. 列出谁在使用udp的某个特定的端口8087: lsof -i udp:8087
+11. 列出某个用户的所有活跃的网络端口： lsof -a -u maxingsong -i
+12. 列出被进程1234的进程所打开的所有ipv4的网络文件：lsof -i 4 -a -p 1234
+
+# ss #
+1. 显示所有打开网络连接的端口：ss -l
+2. 显示连接和进程的信息：ss -lp
+3. 显示所有的tcp信息： ss -t -a
+4. 显示所有的udp信息： ss -ua
+5. 显示所有状态位established的连接： ss -o state established
+6. 显示所有状态为established的SMTP连接: ss -o state established '( dport = :smtp or sport = :smtp )'
+7. 显示所有状态为Established的HTTP连接: ss -o state established '( dport = :http or sport = :http )'
+                                        ss -o state established '( dport = :80 or sport = :80 )'
+8. 列出所有状态为FIN-WAIT-1的Tcp Sockets: ss -o state final_wait_1 '( sport = :http or sport = :https )' dst 202.54.1/24
+9. 显示所有连接到远程服务器192.168.1.5的端口: ss dst 192.168.1.5
+10. 显示所有连接到远程服务器192.168.1.5的80端口: ss dst 192.168.1.5:http
+11. Show all ports connected to local 75.126.153.214:  ss src 75.126.153.214
+12. 将本地或者远程端口和一个数比较:
+    - ss  sport = :http
+    - ss  dport = :http
+    - ss  dport > :1024
+    - ss  sport > :1024
+    - ss sport < :32000
+    - ss  sport eq :22
+    - ss  dport != :22
+    - ss  state connected sport = :http
+    - ss '( sport = :http or sport = :https )'
+    - ss -o state fin-wait-1 '( sport = :http or sport = :https )' dst 192.168.1/24
+# others #
+1. tracerout + ping: mtr baidu.com
+

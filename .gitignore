@@ -1,0 +1,12 @@
+a.out
+*.o
+*.pyc
+project_vim
+JavaProject/
+gnuplot
+cplus/muduo/muduo/
+cplus/muduo/recipes/
+cplus/muduo/build/
+gen-cpp
+*.tar.gz
+*.tar.bz2

@@ -1,0 +1,34 @@
+一. 删除d
+1. sed '2d' example		#删除example的第二行
+2. sed '2,$d' example	#删除example的第二行到最后一行
+3. sed '$d'	example		#删除example的最后一行
+4. sed '/test/d' example #删除example文件所有包含test的行
+5. sed -e '/xx/d' file	#删除含有字母xx的行
+6. sed -e '/xx/!d' file	#删除除含有字符串xx的所有行
+
+二. 替换s(substitute)
+1. sed可以替换文件中的字符串,行，甚至是区块。其中用参数s表示替换字符串，用c表示替换行
+2. sed -e '1c\#!/bin/more' example	#把第一行替换成#!/bin/more
+3. sed -e '5c\just do it' example	#把第五行替换成just do it
+4. sed -e '1,10c\I can do it' example #把第一到十行替换成一行I can do it
+5. sed -e 's/word1/& word2/' example #将word1替换成word1 word2
+6. sed -e 's/\(test\) \(my\) \(car\)/[\2 \3 \1]/' example #结构为[my car test]
+7. sed -e 's/w1/& w2/10' example #替换行内第m个符合的字符串
+8. sed -e 's/w1/& w2/p' example  #替换并输出
+9. sed -e 's/w1/& w2/w w2file' example	#替换并输出到文件w2file
+10. sed -e '1,/else/ s/w1/& w2/g' example	#将1到字符串else内的w1替换为w1 w2字符串
+
+三. 插入和添加
+1. sed -e '1 i\words' example	#在第一行前面添加一行words
+2. sed -e '/#/ i\words' example	#在含有#的行前面插入一行words
+3. sed -e '/hello/ a\world' example	#在行有hello的行后面添加一行world
+
+四. 打印
+1. sed -n '/then/p' example
+2. sed -e '1,5p' example
+3. sed -n '1,5p' example	#只打印1-5行
+4. sed -n '/if/,/fi/ p' example	#打印字符if和fi之间的内容,不怎么理解
+
+五. 字符元的替换：y
+1. sed -e 'y/abc../xyz../' example
+

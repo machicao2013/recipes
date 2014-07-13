@@ -1,0 +1,69 @@
+tmux: 进入tmux
+Ctrl + a c: 创建一个新的窗口
+Ctrl + a n: 切换到下一个窗口
+Ctrl + a p: 切换到上一个窗口
+Ctrl + a &: 推出当前窗口
+
+Ctrl + a -: 分割窗口
+Ctrl + a |: 分割窗口
+Ctrl + a h: 切换到左边的小窗口
+Ctrl + a j: 切换到上边的窗口
+Ctrl + a k: 切换到下边的窗口
+Ctrl + a l: 切换到右边的窗口
+Ctrl + a !: 关闭所有的小窗口
+Ctrl + a x: 关闭当前的小窗口
+
+Ctrl + a t: 打开时钟
+Ctrl + a pageup/pagedown:
+
+Ctrl + a ,: 重命名
+copy&paste
+按 C-a [ 进入复制模式，如果有设置 setw -g mode-keys vi 的话，可按 vi 的按键模式操作。
+移动至待复制的文本处，按一下空格，结合 vi 移动命令开始选择，选好后按回车确认。按 C-a ]
+粘贴已复制的内容。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+Consistent Hash Ring
+====================
+
+To build the example program on Linux, type
+ $ make
+
+Run it with
+ $ ./consistent
+
+The latest version and information is at www.martinbroadhurst.com.
+
+You can contact me by email at this domain.
+
+MARTIN BROADHURST
+

@@ -1,0 +1,37 @@
+CXX=g++
+#CFLAGS=-Wall -g -O2 -DUSE_DEBUG
+CFLAGS=-Wall -g -O2
+INCLUDES=-I. -I/usr/local/include -I/usr/local/include/thrift
+LIBS=-L/usr/local/lib -lthrift -lthriftnb -levent -lleveldb -lboost_thread -lboost_filesystem -lpthread
+OBJS=kv_client_ping.o kv_client_simple.o kv_server_simple.o kv_server_threads.o kv_server_threadpool.o kv_server_noblock.o kv_client_noblock.o kv_constants.o kv.o kv_types.o
+TARGET=client_ping server_simple server_threads server_threadpool client_simple server_noblock client_noblock
+
+all: $(TARGET)
+
+server_simple: kv_server_simple.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+server_threads: kv_server_threads.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+server_threadpool: kv_server_threadpool.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+client_ping: kv_client_ping.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+client_simple: kv_client_simple.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+server_noblock: kv_server_noblock.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+client_noblock: kv_client_noblock.o kv_constants.o kv.o kv_types.o
+		$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
+
+$(OBJS): %.o: %.cpp
+		$(CXX) -c $(CFLAGS) $(INCLUDES) -o $@ $<
+
+.PHONY : clean 
+clean :
+		rm -rf db_test $(OBJS) $(TARGET)

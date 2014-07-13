@@ -1,0 +1,24 @@
+# common debug
+1. x/172xb (address): 查看从address处开始的172个字节
+2. b if i==15: 条件断点
+3. p *parray@array_size: 打印一个数组的内容
+   int main()
+   {
+       int array_size = 20;
+       int *parray = new int[array_size];
+       for (int i = 0; i < array_size; i++)
+       {
+           *(parray + i) = (i + 1);
+       }
+       delete [] parray;
+       return 0;
+    }
+4. 在attach上这个进程时，在指定位置打上断点，当断点触发时，使用gdb的命令gcore，可以立即产生一个coredump。这样，我们就拿到了这个位置的进程快照。
+5. gcore pid:  程序不退出，产生core文件
+6. strace -p 2246 -f -e [send] [ref]!(http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316692.html)
+# multi thread
+1. thread apply all bt
+2. info threads:           显示当前进程中的线程
+3. thread thread_no:  进入线程xx，通常紧接而来的是 bt/f 命令
+
+

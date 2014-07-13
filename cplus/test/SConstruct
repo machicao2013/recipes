@@ -1,0 +1,8 @@
+env = Environment(CC='g++',
+                    CCFLAGS = ['-O2','-Werror', '-g'],
+                    CPPPATH='',
+                    LIBPATH='',
+                    LIBS='')
+env.Program('main',[Split("main.cpp Test.cpp")])
+
+# scons debug = 1
