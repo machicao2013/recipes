@@ -153,6 +153,21 @@ bool ip_is_valid(const string &ip)
     return result;/*}}}*/
 }
 
+bool is_apk_type(const string &content_type)
+{
+    //Content-Type: application/vnd.android.package-archive
+    std::string key = "Content-Type: ";
+    size_t found = 0;
+    if (std::string::npos == (found = content_type.rfind(key))) {
+        return false;
+    }
+    // cout << found << "========================" << endl;
+    if ((found + key.size()) == content_type.find("application/vnd.android", found + key.size())) {
+        return true;
+    }
+    return false;
+}
+
 TEST(StringSuit, length)
 {
     string data = "ma幸song";
@@ -192,10 +207,10 @@ TEST(StringSuit, get_host_of_url)
 
 TEST(StringSuit, host_is_invalid)
 {
-    string host = "127.0.0.1";
+    string host = "127.0.0.1";/*{{{*/
     ASSERT_EQ(0, host_is_invalid(host.c_str(), host.size()));
     host = "13.123";
-    // EXPECT_NE(0, host_is_invalid(host.c_str(), host.size()));
+    // EXPECT_NE(0, host_is_invalid(host.c_str(), host.size()));/*}}}*/
 }
 
 TEST(StringSuit, ip_is_valid)
@@ -216,6 +231,12 @@ TEST(StringSuit, ip_is_valid)
     ASSERT_FALSE(ip_is_valid(host));
     host = "vod15.t3.lixian.vip.xunlei.com";
     ASSERT_FALSE(ip_is_valid(host));/*}}}*/
+}
+
+TEST(StringSuit, is_apk_type)
+{
+    ASSERT_TRUE(is_apk_type("Content-Type: application/vnd.android.package-archive"));
+    ASSERT_TRUE(is_apk_type("Content-Type:fjasldkfjContent-Type: application/vnd.android.package-archive"));
 }
 
 int main(int argc, char **argv)
