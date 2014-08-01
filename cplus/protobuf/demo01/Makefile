@@ -19,7 +19,7 @@ person.pb.o: person.pb.cc
 
 .PHONY: compile clean
 compile:
-	protoc --proto_path=$(SRC) --cpp_out=. $(SRC)/person.proto
+	/home/maxingsong/opt/protobuf/bin/protoc --proto_path=$(SRC) --cpp_out=. $(SRC)/person.proto
 
 clean:
 	rm -rf $(target) *.o

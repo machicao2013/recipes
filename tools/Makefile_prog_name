@@ -1,0 +1,17 @@
+PROG=build/SDUrlWhitelist
+ASVER=$(shell cut -d" " -f7 /etc/redhat-release | sed "s/\.//")
+ifeq ($(strip $(ASVER)),)
+	AS=CentOS
+	ASVER=$(shell cut -d" " -f3 /etc/redhat-release | sed "s/\.//")
+else
+	AS=as
+endif
+OSVER=$(shell uname -i)
+ifeq ($(OSVER),x86_64)
+	OSVER=x64
+else
+	OSVER=x32
+endif
+TIME:=$(shell date +'%Y%m%d')
+
+BIN=$(PROG)_$(AS)$(ASVER)_$(OSVER)_$(TIME)

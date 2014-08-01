@@ -1,6 +1,6 @@
 CC=g++
 INCLUDE=-I/home/maxingsong/opt/log4cplus1-1-3/include/
-LIBS=/home/maxingsong/opt/log4cplus/lib/liblog4cplus.a -lpthread
+LIBS=/home/maxingsong/opt/log4cplus/lib/liblog4cplus.a -lpthread -lrt
 CXXFLAGS=-Werror -g
 
 target=test_log4cplus
