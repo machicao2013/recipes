@@ -1,0 +1,4 @@
+message Foo {
+    optional string text = 1;
+    repeated int32 numbers = 2;
+}
