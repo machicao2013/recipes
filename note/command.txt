@@ -8,6 +8,9 @@
     - curl -x 24.10.28.84:32779 -o home.html http://www.codesky.net
 4. 抓取http头：
     - curl --head(|-I) www.baidu.com
+5. 抓取http的请求头和相应头
+    - curl -v www.baidu.com
+    - wget --debug www.baidu.com
 # nc #
 1. 监听一个端口：nc -l 1234
 2. 连接监听端口：nc 192.168.56.101 1234
