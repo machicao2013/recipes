@@ -5,7 +5,7 @@ CFLAGS=$(OPTIMIZE) -g -Wall -Wextra
 INCLUDES=-I/home/maxingsong/opt/protobuf/include/
 LIBS=-L/home/maxingsong/opt/protobuf/lib/ -lprotobuf -lpthread
 
-target= encode decode
+target= encode decode encdec
 all:$(target)
 
 encode:person.pb.o encode.cpp
@@ -14,12 +14,15 @@ encode:person.pb.o encode.cpp
 decode:person.pb.o decode.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -static person.pb.o decode.cpp -o decode $(LIBS)
 
+encdec: person.pb.o encode_decode.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -static $^ -o $@ $(LIBS)
+
 person.pb.o: person.pb.cc
 	$(CC) $(CFLAGS) $(INCLUDES) -c person.pb.cc
 
 .PHONY: compile clean
 compile:
-	protoc --proto_path=$(SRC) --cpp_out=. $(SRC)/person.proto
+	/home/maxingsong/opt/protobuf/bin/protoc --proto_path=$(SRC) --cpp_out=. $(SRC)/person.proto
 
 clean:
 	rm -rf $(target) *.o

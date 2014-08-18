@@ -171,6 +171,21 @@ std::string get_file_suffix_from_url(const std::string &url)
     return result;/*}}}*/
 }
 
+bool is_apk_type(const string &content_type)
+{
+    //Content-Type: application/vnd.android.package-archive/*{{{*/
+    std::string key = "Content-Type: ";
+    size_t found = 0;
+    if (std::string::npos == (found = content_type.rfind(key))) {
+        return false;
+    }
+    // cout << found << "========================" << endl;
+    if ((found + key.size()) == content_type.find("application/vnd.android", found + key.size())) {
+        return true;
+    }
+    return false;/*}}}*/
+}
+
 TEST(StringSuit, length)
 {
     string data = "ma幸song";
@@ -252,6 +267,12 @@ TEST(StringSuit, string_test)
     size_t pos = url.find_last_of("i");
     // cout << "============" << pos << "\t" << url.size() << endl;
     EXPECT_EQ(54, pos);
+}
+
+TEST(StringSuit, is_apk_type)
+{
+    ASSERT_TRUE(is_apk_type("Content-Type: application/vnd.android.package-archive"));
+    ASSERT_TRUE(is_apk_type("Content-Type:fjasldkfjContent-Type: application/vnd.android.package-archive"));
 }
 
 int main(int argc, char **argv)

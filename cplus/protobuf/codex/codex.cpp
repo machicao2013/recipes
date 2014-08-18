@@ -1,13 +1,25 @@
-#include <google/protobuf/descriptor.h>
+/// @file codex.cpp
+/// @author maxingsong, maxingsong@xunlei.com
+/// @version 0.1
+/// @date 2014-07-25
+/// @brief ported from:
+/// http://cxwangyi.blogspot.com/2010/06/google-protocol-buffers-proto.html
+/// http://cxwangyi.wordpress.com/category/programming-languages/protocol-buffer/
+
 #include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/descriptor.h>
 #include <google/protobuf/dynamic_message.h>
 #include <google/protobuf/io/zero_copy_stream_impl.h>
 #include <google/protobuf/io/tokenizer.h>
 #include <google/protobuf/compiler/parser.h>
 
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <stdint.h>
+using namespace google::protobuf;
+using namespace google::protobuf::io;
+using namespace google::protobuf::compiler;
 using namespace std;
 
 //-----------------------------------------------------------------------------
@@ -23,9 +35,6 @@ using namespace std;
 ////-----------------------------------------------------------------------------
 void GetMessageTypeFromProtoFile(const string& proto_filename, FileDescriptorProto* file_desc_proto)
 {
-    using namespace google::protobuf;
-    using namespace google::protobuf::io;
-    using namespace google::protobuf::compiler;
 
     FILE* proto_file = fopen(proto_filename.c_str(), "r");
     {
@@ -65,7 +74,7 @@ void GetMessageTypeFromProtoFile(const string& proto_filename, FileDescriptorPro
 ////-----------------------------------------------------------------------------
 void PrintDataFile(const string& data_filename, const FileDescriptorProto& file_desc_proto, const string& message_name)
 {
-    const int kMaxRecieveBufferSize = 32 * 1024 * 1024;  // 32MB
+    const uint32_t kMaxRecieveBufferSize = 32 * 1024 * 1024;  // 32MB
     static char buffer[kMaxRecieveBufferSize];
 
     ifstream input_stream(data_filename.c_str());
@@ -115,8 +124,8 @@ void PrintDataFile(const string& data_filename, const FileDescriptorProto& file_
             break;
 
         if (!mutable_msg->ParseFromArray(buffer, proto_msg_size)) {
-            //LOG(FATAL) << "Failed to parse value in KeyValuePair:" << pair.value();
-            cerr << "Failed to parse value in KeyValuePair:" << pair.value();
+            // LOG(FATAL) << "Failed to parse value in KeyValuePair:" << pair.value();
+            // cerr << "Failed to parse value in KeyValuePair:" << pair.value();
         }
 
         cout << mutable_msg->DebugString();
@@ -131,10 +140,10 @@ int main(int argc, char** argv)
     vector<string> data_filenames;
     FileDescriptorProto file_desc_proto;
 
-    ParseCmdLine(argc, argv, &proto_filename, &message_name, &data_filenames);
+    // ParseCmdLine(argc, argv, &proto_filename, &message_name, &data_filenames);
     GetMessageTypeFromProtoFile(proto_filename, &file_desc_proto);
 
-    for (int i = 0; i < data_filenames.size(); ++i) {
+    for (size_t i = 0; i < data_filenames.size(); ++i) {
         PrintDataFile(data_filenames[i], file_desc_proto, message_name);
     }
 

@@ -31,7 +31,7 @@ function generate_gcid_line()
     data="('"
     gcid=`generate_str 20`
     data=$data$gcid"','"
-    bcid=`generate_str 40`
+    bcid=`generate_str 3000`
     data=$data"$bcid""')"
     echo $data
 }

@@ -3,7 +3,7 @@ SRC=.
 OPTIMIZE=-O2
 CFLAGS=$(OPTIMIZE) -g -Wall -Wextra
 INCLUDES=-I/home/maxingsong/opt/protobuf/include/
-LIBS=-L/home/maxingsong/opt/protobuf/lib/ -lprotobuf -lpthread
+LIBS=/home/maxingsong/opt/protobuf/lib/libprotobuf.a -lpthread
 
 target= codex
 all:$(target)
@@ -18,5 +18,5 @@ compile:
 clean:
 	rm -rf *.o
 
-cleanall:
+clear:
 	rm -rf $(target) *.o
