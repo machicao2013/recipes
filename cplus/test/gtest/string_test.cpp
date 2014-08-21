@@ -155,7 +155,7 @@ bool ip_is_valid(const string &ip)
 
 bool is_apk_type(const string &content_type)
 {
-    //Content-Type: application/vnd.android.package-archive
+    //Content-Type: application/vnd.android.package-archive/*{{{*/
     std::string key = "Content-Type: ";
     size_t found = 0;
     if (std::string::npos == (found = content_type.rfind(key))) {
@@ -165,7 +165,30 @@ bool is_apk_type(const string &content_type)
     if ((found + key.size()) == content_type.find("application/vnd.android", found + key.size())) {
         return true;
     }
-    return false;
+    return false;/*}}}*/
+}
+
+void escape(string &key)
+{
+    do {
+        size_t begin = key.find_first_of("{");
+        if (begin == std::string::npos) {
+            break;
+        }
+        size_t end = key.find_first_of("}", begin);
+        if (end == std::string::npos) {
+            break;
+        }
+        size_t pos = key.find_first_of(":", begin);
+        if (pos == std::string::npos) {
+            break;
+        }
+
+        string type = key.substr(begin + 1, pos - begin - 1);
+        if (type == "hex") {
+            key = key.substr(0, begin) + hex2str(key.substr(pos + 1, end - pos - 1)) + key.substr(end + 1);
+        }
+    } while(true);
 }
 
 TEST(StringSuit, length)
