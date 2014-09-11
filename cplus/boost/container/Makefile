@@ -1,29 +1,24 @@
 CXX=g++
-CFLAGS=-g -Wall -Werror -Wextra
-
-BOOST_INCLUDE=-I/home/maxingsong/opt/boost/include/
-BOOST_LIBS=
-
-INCLUDES=$(BOOST_INCLUDE)
-LIBS=$(BOOST_LIBS)
-
-CPPFLAGS=$(INCLUDES) -MD
+OPTIMIZE=-O2
+CFLAGS=$(OPTIMIZE) -g -Wall -Wextra -Werror -MMD
+INCLUDES=-I/home/maxingsong/opt/boost/include/
+LIBS=
+CPPFLAGS=$(CFLAGS) $(INCLUDES)
 
 SRCS=$(wildcard *.cpp)
 OBJS=$(patsubst %.cpp,%.o,$(SRCS))
 DEPS=$(patsubst %.cpp,%.d,$(SRCS))
 
-PTR_VECTOR_OBJS=$(filter ptr_vector_test.o,$(OBJS))
+target=$(OBJS)
 
-TARGET=ptr_vector
+all:$(target)
 
-all:$(TARGET)
-
-ptr_vector:$(PTR_VECTOR_OBJS)
-	$(CXX) -o $@ $^ $(LIBS)
-
-clean:
-	$(RM) $(OBJS) $(DEPS)
-	$(RM) $(TARGET)
+%.o:%.cpp
+	$(CXX) $(CPPFLAGS) -o $@ $< $(LIBS)
 
 -include $(DEPS)
+
+clean:
+	$(RM) $(target)
+	$(RM) $(OBJS)
+	$(RM) $(DEPS)

@@ -18,9 +18,9 @@ string get_host_of_url(const  string & url)
     host_start = url.find(PROTOCOL_SUFFIX);
     if (host_start != string::npos ) {
         host_end = url.find_first_of(HOST_SUFFIX, host_start+PROTOCOL_SUFFIX.length());
-        cout << "=====================  Debug begin =======================" << endl;
-        cout << "host_start: " << host_start << ", host_end: " << host_end << ", url_len: " << url.length() << endl;
-        cout << "=====================  Debug end   =======================" << endl;
+        // cout << "=====================  Debug begin =======================" << endl;
+        // cout << "host_start: " << host_start << ", host_end: " << host_end << ", url_len: " << url.length() << endl;
+        // cout << "=====================  Debug end   =======================" << endl;
         if (host_end != string::npos) {
             host_start += PROTOCOL_SUFFIX.length();
             host = url.substr(host_start, host_end-host_start);
@@ -49,7 +49,7 @@ string get_host_of_url(const  string & url)
 // protocol://hostname/path/filename.suffix?p=p4pdata
 bool is_valid_p4p_url(const std::string &url)
 {
-   // 判断长度是否合法/*{{{*/
+    // 判断长度是否合法/*{{{*/
     if (url.empty() || url.length() > 255) {
         return false;
     }
@@ -79,7 +79,7 @@ bool is_valid_p4p_url(const std::string &url)
     char* ptr = buf;
     uint32_t ip;
     memcpy(&ip, ptr, sizeof(ip));
-    cout << ip << endl;
+    // cout << ip << endl;
     ptr += sizeof(ip);
 
     uint32_t checksum;
@@ -153,9 +153,27 @@ bool ip_is_valid(const string &ip)
     return result;/*}}}*/
 }
 
+std::string get_file_suffix_from_url(const std::string &url)
+{
+    std::string result = "";/*{{{*/
+    size_t pos = url.find_last_of("/");
+    // cout << "--------------------" << url << "\t" << pos << endl;
+    if (pos != std::string::npos && (pos != url.size() - 1)) {
+        result = url.substr(pos + 1);
+        pos = result.find_last_of(".");
+        // cout << "--------------------" << result << "\t" << pos << endl;
+        if (pos != std::string::npos && (pos != result.size() - 1)) {
+            result = result.substr(pos + 1);
+        } else {
+            result = "";
+        }
+    }
+    return result;/*}}}*/
+}
+
 bool is_apk_type(const string &content_type)
 {
-    //Content-Type: application/vnd.android.package-archive
+    //Content-Type: application/vnd.android.package-archive/*{{{*/
     std::string key = "Content-Type: ";
     size_t found = 0;
     if (std::string::npos == (found = content_type.rfind(key))) {
@@ -165,7 +183,30 @@ bool is_apk_type(const string &content_type)
     if ((found + key.size()) == content_type.find("application/vnd.android", found + key.size())) {
         return true;
     }
-    return false;
+    return false;/*}}}*/
+}
+
+void escape(string &key)
+{
+    do {
+        size_t begin = key.find_first_of("{");
+        if (begin == std::string::npos) {
+            break;
+        }
+        size_t end = key.find_first_of("}", begin);
+        if (end == std::string::npos) {
+            break;
+        }
+        size_t pos = key.find_first_of(":", begin);
+        if (pos == std::string::npos) {
+            break;
+        }
+
+        string type = key.substr(begin + 1, pos - begin - 1);
+        if (type == "hex") {
+            // key = key.substr(0, begin) + hex2str(key.substr(pos + 1, end - pos - 1)) + key.substr(end + 1);
+        }
+    } while(true);
 }
 
 TEST(StringSuit, length)
@@ -176,10 +217,10 @@ TEST(StringSuit, length)
 
 TEST(StringSuit, is_valid_p4p_url)
 {
-    string url = "http://js22.ctt.cache.c10050.com:443/data4/down_temp/divide_part_4/C49A6AECC479869267E6B77F6256DC37A0A40C52.aspx?p=ekhAhoBijztxD6C4";
+    string url = "http://js22.ctt.cache.c10050.com:443/data4/down_temp/divide_part_4/C49A6AECC479869267E6B77F6256DC37A0A40C52.aspx?p=ekhAhoBijztxD6C4";/*{{{*/
     // string url = "http://111.161.126.50:443/data1/new_download/1/1D1581BBE6E14FC806D6B2C221FA1109895DC137?p=b6F+Mqv4325alfDt";
     EXPECT_TRUE(is_valid_p4p_url(url));
-    cout << url << endl;
+    // cout << url << endl;[>}}}<]
 }
 
 TEST(StringSuit, find_first_of)
@@ -231,6 +272,24 @@ TEST(StringSuit, ip_is_valid)
     ASSERT_FALSE(ip_is_valid(host));
     host = "vod15.t3.lixian.vip.xunlei.com";
     ASSERT_FALSE(ip_is_valid(host));/*}}}*/
+}
+
+TEST(StringSuit, get_file_suffix_from_url)
+{
+    std::string url = "file:///C:/Users/maxingsong/Downloads/jeffy-vim-v2.1.zip";
+    std::string result = "";
+    result = get_file_suffix_from_url(url);
+    EXPECT_STREQ("zip", result.c_str());
+}
+
+TEST(StringSuit, string_test)
+{
+    std::string url = "file:///C:/Users/maxingsong/Downloads/jeffy-vim-v2.1.zip";
+    // size_t pos = url.find_last_of("i", url.size());
+    // equals to
+    size_t pos = url.find_last_of("i");
+    // cout << "============" << pos << "\t" << url.size() << endl;
+    EXPECT_EQ(54, pos);
 }
 
 TEST(StringSuit, is_apk_type)
