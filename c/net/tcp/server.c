@@ -11,7 +11,7 @@ int main()
     int listenfd,clientfd;
     struct sockaddr_in server_addr,client_addr;
     socklen_t sin_size;
-    unsigned short portnum=8888;
+    unsigned short portnum=9999;
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     if(-1 == listenfd)
     {
@@ -55,7 +55,10 @@ int main()
 
         printf("recv: %s", recvbuf);
         send(clientfd, recvbuf, strlen(recvbuf), 0);
-        close(clientfd);
+        /* close(clientfd); */
+        /* exit(1); */
+        shutdown(clientfd, SHUT_RDWR);
+        printf("server close client\n");
     }
     close(listenfd);
     return 0;

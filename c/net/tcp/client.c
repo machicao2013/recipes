@@ -12,7 +12,7 @@ int main()
     int clientfd;
     char buffer[1024] = {0};
     struct sockaddr_in s_add;
-    unsigned short portnum = 8888;
+    unsigned short portnum = 9999;
 
     clientfd = socket(AF_INET, SOCK_STREAM, 0);
     if(-1 == clientfd)
@@ -39,7 +39,23 @@ int main()
     send(clientfd, buffer, strlen(buffer), 0);
     recv(clientfd, buffer, 1024, 0);
     printf("recv: %s", buffer);
+    sleep(2);
+    int ret = send(clientfd, buffer, strlen(buffer), 0);
+    if (ret <= 0) {
+        printf("send data error\n");
+    } else {
+        printf("send data success\n");
+    }
+    sleep(10);
+    printf("send second time\n");
+    ret = send(clientfd, buffer, strlen(buffer), 0);
+    if (ret <= 0) {
+        printf("send data error\n");
+    } else {
+        printf("send data success\n");
+    }
 
-    close(clientfd);
+    /* close(clientfd); */
+    sleep(300);
     return 0;
 }
