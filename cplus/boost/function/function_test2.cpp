@@ -34,6 +34,10 @@ int main()
     func3 = bind(&demo_class::add, &sc, _1, _3);
     std::cout << func3(10, 20, 30) << '\n';
 
+    function<int (int, int, int)> func4;
+    func4 = bind(&demo_class::add, &sc, _1, _2);
+    std::cout << func4(10, 20, 50) << '\n';
+
     return 0;
 }
 
