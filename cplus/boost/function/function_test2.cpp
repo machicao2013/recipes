@@ -29,6 +29,11 @@ int main()
     func2 = bind(&demo_class::add, &sc, _1, _2);
     std::cout << func2(10, 20) << '\n';
 
+    //method 3 test
+    function<int(int, int,int)> func3;
+    func3 = bind(&demo_class::add, &sc, _1, _3);
+    std::cout << func3(10, 20, 30) << '\n';
+
     return 0;
 }
 
