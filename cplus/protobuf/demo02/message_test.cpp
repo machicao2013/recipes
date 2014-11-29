@@ -36,8 +36,19 @@ int main()
         using ::google::protobuf::FieldDescriptor;
 
         // Same as the last block, but do it dynamically via the Message reflection interface
-        ::google::protobuf::Message *foo = new Foo();
-        const ::google::protobuf::Descriptor *descriptor = foo->GetDescriptor();
+        // one way to get Descriptor
+        {
+            // ::google::protobuf::Message *foo = new Foo();
+            // const ::google::protobuf::Descriptor *descriptor = foo->GetDescriptor();
+        }
+
+        // another way to get Descriptor
+        const ::google::protobuf::DescriptorPool *pool = ::google::protobuf::DescriptorPool::generated_pool();
+        const ::google::protobuf::Descriptor *descriptor = pool->FindMessageTypeByName("Foo");
+        ::google::protobuf::MessageFactory *factory = ::google::protobuf::MessageFactory::generated_factory();
+        const ::google::protobuf::Message *cfoo = factory->GetPrototype(descriptor);
+        ::google::protobuf::Message *foo = cfoo->New();
+
 
         // Get the descriptos for the fields we're interested in and verify their types
         const ::google::protobuf::FieldDescriptor *text_field = descriptor->FindFieldByName("text");
@@ -61,10 +72,10 @@ int main()
         assert(reflection->GetRepeatedInt32(*foo, numbers_field, 1) == 5);
         assert(reflection->GetRepeatedInt32(*foo, numbers_field, 2) == 42);
 
-        if(NULL != foo) {
-            delete foo;
-            foo = NULL;
-        }
+        // if(NULL != foo) {
+            // delete foo;
+            // foo = NULL;
+        // }
     }
     return 0;
 }

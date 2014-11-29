@@ -5,11 +5,14 @@ CFLAGS=$(OPTIMIZE) -g -Wall -Wextra
 INCLUDES=-I/home/maxingsong/opt/protobuf/include/
 LIBS=-L/home/maxingsong/opt/protobuf/lib/ -lprotobuf -lpthread
 
-target= encode decode encdec
+target= encode decode encdec encode2
 all:$(target)
 
 encode:person.pb.o encode.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -static person.pb.o encode.cpp -o encode $(LIBS)
+
+encode2:person.pb.o encode2.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -static person.pb.o encode2.cpp -o encode2 $(LIBS)
 
 decode:person.pb.o decode.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -static person.pb.o decode.cpp -o decode $(LIBS)
