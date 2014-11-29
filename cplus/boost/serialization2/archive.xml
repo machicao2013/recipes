@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="9">
+<ptr class_id="0" tracking_level="0" version="1">
+	<px class_id="1" object_id="_0">
+		<count>5</count>
+		<item_version>0</item_version>
+		<item>34.200001</item>
+		<item>78.099998</item>
+		<item>22.221001</item>
+		<item>1</item>
+		<item>-910.88</item>
+	</px>
+</ptr>
+</boost_serialization>
+
