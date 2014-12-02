@@ -8,5 +8,5 @@ dirs=`find $base_dir -name "Makefile"`
 
 for dir in $dirs; do
     echo ${dir%/*}
-    cd ${dir%/*} && make -f ./Makefile clean
+    cd ${dir%/*} && make -f ./Makefile veryclean
 done

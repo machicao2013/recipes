@@ -177,5 +177,9 @@
     - [reference2](http://www.cnblogs.com/adforce/archive/2012/06/02/2532253.html)
     - [reference3](http://www.mysqlsupport.cn/optimize_limit_sql/)
 
+# mysql c API #
+1. you may also see libraries that include _r in the names. Before MySQL 5.5, these were built as thread-safe (re-entrant) libraries separately from the non-_r libraries. As of 5.5, both libraries are the same and the _r names are symbolic links to the corresponding non-_r names. There is no need to use the _r libraries.
+2. 
+
 ## 其他 ##
 1. mysql不允许对同一张表同时进行查询和更新。
