@@ -18,4 +18,6 @@ zhuwen          zhuwen123
 qiuzhicong      qiuzhicong123
 zhouenjie       zhouenjie123
 chenbaiheng     chenbaiheng123
+luxunwei        luxunwei123
+tanjuan         tanjuan123
 EOF
