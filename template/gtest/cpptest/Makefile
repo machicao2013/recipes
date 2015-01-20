@@ -1,6 +1,6 @@
 CC=g++
-INCLUDE=-I/home/maxingsong/opt/gtest-1.7.0/include
-LIBS=-L/home/maxingsong/opt/gtest-1.7.0/lib -lgtest -lpthread
+INCLUDE=-I/home/maxingsong/opt/gtest/include
+LIBS=-L/home/maxingsong/opt/gtest/lib -lgtest -lpthread
 CPPFLAGS=-Werror -g -Wall -Wextra
 
 target=oo_test
