@@ -5,7 +5,7 @@ int main (void)
     //  Prepare our context and dealer
     void *context = zmq_ctx_new ();
     void *dealer = zmq_socket (context, ZMQ_DEALER);
-    zmq_setsockopt (dealer, ZMQ_IDENTITY, "B", 1);
+    // zmq_setsockopt (dealer, ZMQ_IDENTITY, "B", 1);
     zmq_connect (dealer, "tcp://localhost:5563");
 
     int count = 10;
@@ -18,7 +18,7 @@ int main (void)
         // free (address);
         // printf ("[%s]\n", contents);
         // free (contents);
-        s_sendmore(dealer, "");
+        // s_sendmore(dealer, "");
         s_send(dealer, "Hello");
     }
     //  We never get here, but clean up anyhow
