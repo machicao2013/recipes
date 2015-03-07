@@ -8,7 +8,7 @@ int main (void)
     zmq_bind (router, "tcp://*:5563");
 
     while (1) {
-        free(s_recv (router));
+        // free(s_recv (router));
         free(s_recv (router));
         char *msg = s_recv(router);
         printf("recv msg: [%s]\n", msg);
