@@ -6,7 +6,7 @@
 4. 对TCP发送策略来说，拥塞窗口可能会隐含的阻止原来可能允许发送的数据。如果(丢失的分段说明)出现了拥塞，拥塞窗口就会减小，可能会减小到一个段长。根据排队数据的多少以及应用程序试图发送数据的多少，可能会阻止部分或全部数据的传送。
 5. 影响TCP发送策略的另外一个因素是Nagle算法。算法指出，在任意指定时刻，未被确认的小段不能超过一个。这里小段指的是长度小于MSS的段。Nagle算法的目的是防止TCP用一系列的小段来充斥网络。TCP会将数量较少的数据保存起来，知道收到对前一个小段的ACK为止，然后将所有数据一次性地发送出去。
 6. shutdown:如果关闭连接的接收端，则套接字无法接收更多的数据，如果应用程序再进行读操作，都会返回EOF。如果连接关闭后，unix会刷新输入队列，丢弃应用程序还未读取的所有数据。如果有新数据到达，TCP会进行ACK，然后悄悄地将其丢弃，因为应用程序再也无法接收数据了。
-7. shutdown:乳沟关闭连接的发送端，将套接字标识为无法发送任何额外的数据，后继所有试图对套接字进行的写操作都会出错。将发送缓冲区中所有的数据都发送出去之后，TCP会向其对等实体发送一个FIN，通知它还没有其它数据了。这被称为半关闭(half close)。
+7. shutdown:如果关闭连接的发送端，将套接字标识为无法发送任何额外的数据，后继所有试图对套接字进行的写操作都会出错。将发送缓冲区中所有的数据都发送出去之后，TCP会向其对等实体发送一个FIN，通知它还没有其它数据了。这被称为半关闭(half close)。
 8. 使用TIME-WAIT状态的目的：
     - 维护连接状态，以防主动关闭连接的那端发送的最后一条ACK丢失后造成另一端重新发送FIN信号;
     - 为耗尽网络中所有此连接的走失段提供时间
@@ -24,6 +24,58 @@
             return 0;
         errno = err;
         return (errno == 0);
+    }
+
+    int conn_nonb(int sockfd, const struct sockaddr_in *saptr, socklen_t salen, int nsec)
+    {
+        int flags, n, error, code;
+        socklen_t len;
+        fd_set wset;
+        struct timeval tval;
+
+        flags = fcntl(sockfd, F_GETFL, 0);
+        fcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
+
+        error = 0;
+        if ((n == connect(sockfd, saptr, salen)) == 0) {
+            goto done;
+        } else if (n < 0 && errno != EINPROGRESS) {
+            return (-1);
+        }
+
+        /* Do whatever we want while the connect is taking place */
+
+        FD_ZERO(&wset);
+        FD_SET(sockfd, &wset);
+        tval.tv_sec = nsec;
+        tval.tv_usec = 0;
+
+        if ((n = select(sockfd+1, NULL, &wset, NULL, nsec ? &tval : NULL)) == 0) {
+            close(sockfd);  /* timeout */
+            errno = ETIMEDOUT;
+            return (-1);
+        }
+
+        if (FD_ISSET(sockfd, &wset)) {
+            len = sizeof(error);
+            code = getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &error, &len);
+            /* 如果发生错误，Solaris实现的getsockopt返回-1，
+             * 把pending error设置给errno. Berkeley实现的
+             * getsockopt返回0, pending error返回给error.
+             * 我们需要处理这两种情况 */
+            if (code < 0 || error) {
+                close(sockfd);
+                if (error)
+                    errno = error;
+                return (-1);
+            }
+        } else {
+            fprintf(stderr, "select error: sockfd not set");
+            exit(0);
+        }
+    done:
+        fcntl(sockfd, F_SETFL, flags);  /* restore file status flags */
+        return (0);
     }
 11. 建议：将发送缓冲区的长度至少应该设置为MSS的3倍大。
 
