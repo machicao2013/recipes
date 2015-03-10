@@ -3,6 +3,8 @@
 #include <ctime>
 using namespace std;
 
+// http://student.zjzk.cn/course_ware/data_structure/web/paixu/paixu8.4.2.2.htm
+//
 static void quick_sort_core(int *array, size_t begin, size_t end);
 static size_t partition(int *array, size_t begin, size_t end);
 
@@ -57,8 +59,8 @@ static void heap_down(int *array, size_t pos, size_t end)
 {
     int temp = array[pos];
     size_t lchild = 2 * pos + 1;
-    while (lchild < end) {
-        if (lchild + 1 <= end && array[lchild + 1] > array[lchild]) {
+    while (lchild <= end) {
+        if (lchild < end && array[lchild + 1] > array[lchild]) {
             lchild = lchild + 1;
         }
         if (array[pos] > array[lchild]) {
